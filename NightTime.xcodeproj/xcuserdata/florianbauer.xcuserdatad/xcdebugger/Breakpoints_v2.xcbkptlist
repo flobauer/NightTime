@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "DBD4B1B4-A6CC-424C-A90F-3FE8DFA5AFFE"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A9A8A876-4E9A-40C3-B134-4D5337A6F6CB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Todo App/helper/DateHelper.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "calculateTotalMinutesOfTask(start:end:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "A9A8A876-4E9A-40C3-B134-4D5337A6F6CB - 6c3ed1b3a8b8f6a1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Todo_App.calculateHoursOfTask(start: Foundation.Date, end: Foundation.Date) -&gt; Swift.String"
+                  moduleName = "Todo App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/florianbauer/code/Todo%20App/Todo%20App/helper/DateHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "936">
+               </Location>
+               <Location
+                  uuid = "A9A8A876-4E9A-40C3-B134-4D5337A6F6CB - 6c3ed1b3a8b8f6c0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Todo_App.calculateHoursOfTask(start: Foundation.Date, end: Foundation.Date) -&gt; Swift.String"
+                  moduleName = "Todo App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/florianbauer/code/Todo%20App/Todo%20App/helper/DateHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "624">
+               </Location>
+               <Location
+                  uuid = "A9A8A876-4E9A-40C3-B134-4D5337A6F6CB - ec7b646ac90c7b30"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Todo_App.calculateTotalMinutesOfTask(start: Foundation.Date, end: Foundation.Date) -&gt; Swift.Int"
+                  moduleName = "Todo App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/florianbauer/code/Todo%20App/Todo%20App/helper/DateHelper.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "376">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
