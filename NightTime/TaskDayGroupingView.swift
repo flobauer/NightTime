@@ -10,22 +10,9 @@ import SwiftUI
 
 struct TaskDayGroupingView: View {
     @EnvironmentObject var appState: DateState
-        
-    @Binding var stream: Stream
-    
-    @Query var tasks: [Task]
-    
-    init(stream: Binding<Stream>) {
-        self._stream = stream
-        
-        let id = stream.id
-        let predicate = #Predicate<Task> { task in
-            task.stream?.id == id
-        }
 
-        self._tasks = Query(filter: predicate, sort: \Task.endDate)
-    }
-    
+    var stream: Stream
+
     var body: some View {
         LazyVStack {
             ForEach(self.appState.allDays, id: \.id) { day in
@@ -34,7 +21,7 @@ struct TaskDayGroupingView: View {
                         date: day.day,
                         month: day.month,
                         name: day.weekday,
-                        time: calculateHoursPerDay(day: day.date, tasks: self.tasks)
+                        time: calculateHoursPerDay(day: day.date, tasks: self.stream.tasks)
                     ).padding(.vertical, 6)
                     Spacer()
                 }

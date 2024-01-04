@@ -9,31 +9,11 @@ import SwiftData
 import SwiftUI
 
 struct ProjectView: View {
-    @Environment(\.colorScheme) var colorScheme
     @Binding var activeProject: Project
-    @Binding var showCreateModal: Bool
-    @Binding var showEditModal: Bool
-    
-    @Query var streams: [Stream]
-    
-    @State var activeStream: Stream
-    @State var currentStreamIndex: Int = 0
-    @State var showCreateScreen: Bool = false
-    
-    init(activeProject: Binding<Project>, showCreateModal: Binding<Bool>, showEditModal: Binding<Bool>) {
-        print("Project Selected")
-        self._activeProject = activeProject
-        self._activeStream = State(initialValue: activeProject.wrappedValue.streams.first!)
-        self._showCreateModal = showCreateModal
-        self._showEditModal = showEditModal
-        
-        let id = activeProject.id
-        let predicate = #Predicate<Stream> { stream in
-            stream.project?.id == id
-        }
+    @Binding var showProjectCreateModal: Bool
+    @Binding var showProjectEditModal: Bool
 
-        self._streams = Query(filter: predicate, sort: \Stream.order)
-    }
+    @State var activeStream: Stream?
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -41,34 +21,40 @@ struct ProjectView: View {
             VStack {
                 StreamBar(
                     activeStream: self.$activeStream,
-                    showCreateScreen: self.$showCreateScreen,
-                    streams: self.streams
+                    streams: self.activeProject.sortedStreams
                 )
-                StreamView(
-                    project: self.$activeProject,
-                    stream: self.$activeStream
-                )
+                if self.activeStream != nil {
+                    StreamView(
+                        project: self.activeProject,
+                        stream: self.activeStream!
+                    )
+                } else {
+                    StreamCreateView(
+                        activeProject: self.activeProject,
+                        activeStream: self.$activeStream
+                    )
+                }
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(
             leading: ProjectDropdown(
                 activeProject: self.$activeProject,
-                showCreateModal: self.$showCreateModal
+                showProjectCreateModal: self.$showProjectCreateModal
             ),
             trailing: Button(action: {
-                self.showEditModal = true
+                self.showProjectEditModal = true
             }, label: {
                 Image(systemName: "gearshape.fill")
                     .foregroundColor(Color.primary)
             })
         )
         .navigationBarColor(UIColor.systemGray6)
-        .sheet(isPresented: self.$showCreateScreen) {
-            StreamCreateView(activeProject: self.$activeProject)
-        }
         .ignoresSafeArea(.all, edges: .bottom)
+        .onAppear {
+            if self.activeProject.sortedStreams.count > 0 {
+                self.activeStream = self.activeProject.sortedStreams.first
+            }
+        }
     }
 }
 
@@ -87,24 +73,24 @@ extension View {
 
 struct NavigationBarModifier: ViewModifier {
     var backgroundColor: UIColor?
-    
+
     init(backgroundColor: UIColor?) {
         self.backgroundColor = backgroundColor
-        
+
         let textColor = UIColor(Color.primary)
-        
+
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = .clear
         coloredAppearance.titleTextAttributes = [.foregroundColor: textColor]
         coloredAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
-        
+
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().compactAppearance = coloredAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
         UINavigationBar.appearance().tintColor = textColor
     }
-    
+
     func body(content: Content) -> some View {
         ZStack {
             content
@@ -117,5 +103,22 @@ struct NavigationBarModifier: ViewModifier {
                 }
             }
         }
+    }
+}
+
+#Preview {
+    // load data
+    let preview = Preview(Project.self)
+    let projects = Project.sampleProjects
+    preview.addExamples(projects)
+
+    return NavigationStack {
+        ProjectView(
+            activeProject: .constant(projects.first!),
+            showProjectCreateModal: .constant(false),
+            showProjectEditModal: .constant(false)
+        )
+        .modelContainer(preview.container)
+        .environmentObject(DateState())
     }
 }

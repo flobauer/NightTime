@@ -11,8 +11,8 @@ import SwiftUI
 struct StreamView: View {
     @Environment(\.modelContext) var modelContext
     
-    @Binding var project: Project
-    @Binding var stream: Stream
+    var project: Project
+    var stream: Stream
     
     @State private var activity = ""
     @State private var start: Date = .now
@@ -39,7 +39,7 @@ struct StreamView: View {
                             user: "flo"
                         )
                         
-                        self.stream.tasks.append(task)
+                        self.stream.tasks?.append(task)
                         
                         self.activity = ""
                         
@@ -57,7 +57,7 @@ struct StreamView: View {
             GeometryReader { outer in
                 let outerHeight = outer.size.height
                 ScrollView(.vertical) {
-                    TaskDayGroupingView(stream: self.$stream)
+                    TaskDayGroupingView(stream: self.stream)
                         .background {
                             GeometryReader { proxy in
                                 let contentHeight = proxy.size.height
@@ -85,5 +85,23 @@ struct StreamView: View {
             }
         }
         .animation(.easeInOut, value: self.showingHeader)
+    }
+}
+
+#Preview {
+    // load data
+    let preview = Preview(Project.self)
+    let projects = Project.sampleProjects
+    preview.addExamples(projects)
+    
+    let project = projects.first!
+
+    return NavigationStack {
+        StreamView(
+            project: project,
+            stream: project.streams!.first!
+        )
+        .modelContainer(preview.container)
+        .environmentObject(DateState())
     }
 }

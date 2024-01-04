@@ -9,25 +9,27 @@ import SwiftData
 import SwiftUI
 
 @main
-struct Todo_AppApp: App {
-    var sharedModelContainer: ModelContainer = {
+struct NightTimeApp: App {
+    let container: ModelContainer
+
+    init() {
         let schema = Schema([
             Project.self,
         ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let config = ModelConfiguration("NightTime", schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            container = try ModelContainer(for: Project.self, configurations: config)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(container)
         .environmentObject(DateState())
     }
 }

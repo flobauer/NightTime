@@ -41,3 +41,17 @@ struct DateCard: View {
         }
     }
 }
+
+#Preview {
+    let formatter = DateFormatter()
+    let date = Date.now
+
+    return NavigationStack {
+        DateCard(
+            date: date.dayOfWeek(withFormatter: formatter) ?? "",
+            month: date.nameOfMonth(withFormatter: formatter) ?? "",
+            name: "test",
+            time: "test2"
+        )
+    }
+}

@@ -58,11 +58,11 @@ struct TaskListView: View {
                             endTime: getTimeString(date: self.end),
                             user: "flo"
                         )
-                    
-                        self.stream.tasks.append(task)
-                    
+                        
+                        self.stream.tasks?.append(task)
+                        
                         self.activity = ""
-                    
+                        
                         withAnimation {
                             self.start = getStartDate(tasks: self.tasks)
                             self.end = getEndDate()
@@ -73,26 +73,28 @@ struct TaskListView: View {
                     self.end = getEndDate()
                 }
             }
-            List {
-                ForEach(self.tasks, id: \.id) { task in
-                    HStack {
-                        NavigationLink(destination: TaskDetailView(task: task)) {
-                            Text(task.title)
-                        }.foregroundColor(Color.primary)
-                        Spacer()
-                        VStack {
-                            Text(calculateHoursOfTask(start: task.getStartAsDate(), end: task.getEndAsDate()))
-                                .font(.system(size: 10))
-                                .foregroundColor(.gray)
-                            Text(task.startDate)
-                                .font(.system(size: 10))
-                                .foregroundColor(.gray)
+            if self.tasks.isEmpty {
+                Text("No tasks yet")
+            } else {
+                List {
+                    ForEach(self.tasks, id: \.id) { task in
+                        HStack {
+                            NavigationLink(destination: TaskDetailView(task: task)) {
+                                Text(task.title)
+                            }
+                            Spacer()
+                            VStack {
+                                Text(calculateHoursOfTask(start: task.getStartAsDate(), end: task.getEndAsDate()))
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                                Text(task.startDate)
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                            }
                         }
-                    }
-                }.onDelete(perform: deleteItems)
-            }.background(
-                Color.primary
-            ).navigationTitle(getDateString(date: day))
-        }
+                    }.onDelete(perform: deleteItems)
+                }
+            }
+        }.navigationTitle(getDateString(date: day))
     }
 }

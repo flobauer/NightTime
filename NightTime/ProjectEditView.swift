@@ -19,8 +19,8 @@ struct ProjectEditView: View {
                     TextField("Name", text: $project.name)
                 }
                 Section(header: Text("Streams")) {
-                    ForEach(project.sortedStreams, id: \.id) { stream in
-                        TextField("Stream Name", text: $project.streams[project.streams.firstIndex(of: stream)!].name)
+                    ForEach(project.sortedStreams) { stream in
+                        EditScreenName(stream: stream)
                     }.onMove { from, to in
                         // Make a copy of the current list of items
                         var updatedItems = self.project.sortedStreams
@@ -44,5 +44,20 @@ struct ProjectEditView: View {
                 modelContext.delete(project.sortedStreams[index])
             }
         }
+    }
+}
+
+struct EditScreenName: View {
+    var stream: Stream
+    @State var name: String = ""
+    
+    var body: some View {
+        TextField("Stream Name", text: $name)
+            .onAppear {
+                self.name = stream.name
+            }
+            .onChange(of: name) { _, newValue in
+                stream.name = newValue
+            }
     }
 }

@@ -24,3 +24,9 @@ struct CustomButton: View {
         }
     }
 }
+
+#Preview {
+    CustomButton(title: "Save") {
+        print("pressed")
+    }
+}

@@ -39,13 +39,13 @@ struct ProjectCreateView: View {
                         // add the first Stream
                         let stream = Stream(name: "Stream 1")
                         stream.order = 0
-                        project.streams.append(stream)
+                        project.streams?.append(stream)
                         
                         self.modelContext.insert(project)
                         
-                        // navigate to ProjectView
                         projectName = ""
                         
+                        // navigate to ProjectView
                         dismiss()
                     }
                 })

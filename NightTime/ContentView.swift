@@ -10,38 +10,52 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
-    
     @Query var projects: [Project]
-    
-    private var selectedProject: Binding<Project> {
+
+    var selectedProject: Binding<Project> {
         Binding(
             get: { (projects.first(where: { $0.selected }) ?? projects.first)! },
             set: { _ in }
         )
     }
-    
-    @State private var showCreateModal: Bool = false
-    @State private var showEditModal: Bool = false
-    
+
+    @State var showProjectCreateModal: Bool = false
+    @State var showProjectEditModal: Bool = false
+
     var body: some View {
         NavigationView {
             if !projects.isEmpty {
-                ProjectView(activeProject: selectedProject, showCreateModal: $showCreateModal, showEditModal: $showEditModal)
+                ProjectView(
+                    activeProject: selectedProject,
+                    showProjectCreateModal: $showProjectCreateModal,
+                    showProjectEditModal: $showProjectEditModal
+                )
             } else {
                 VStack {
                     Text("Night Time").font(.largeTitle).padding()
                     Text("Timetracking for humans in the creative industry that dislike time tracking").font(.title2).padding()
                     Button(action: {
-                        self.showCreateModal = true
+                        self.showProjectCreateModal = true
                     }) {
                         Label("Create Project", systemImage: "plus")
                     }
                 }
             }
-        }.sheet(isPresented: $showCreateModal) {
+        }.sheet(isPresented: $showProjectCreateModal) {
             ProjectCreateView(projects: projects)
-        }.sheet(isPresented: $showEditModal) {
+        }.sheet(isPresented: $showProjectEditModal) {
             ProjectEditView(project: selectedProject)
         }
     }
+}
+
+#Preview {
+    // load data
+    let preview = Preview(Project.self)
+    let projects = Project.sampleProjects
+    preview.addExamples(projects)
+
+    return ContentView()
+        .modelContainer(preview.container)
+        .environmentObject(DateState())
 }

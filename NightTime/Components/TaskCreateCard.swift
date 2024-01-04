@@ -22,13 +22,11 @@ struct TaskCreateCard: View {
 
     var body: some View {
         VStack {
-            HStack {
-                NeumorphicStyleTextField(
-                    textField: TextField("How you doin...", text: self.$activity),
-                    focus: self.$TaskTitleIsFocused,
-                    imageName: "magnifyingglass"
-                )
-            }
+            CustomTextField(
+                textField: TextField("Enter your activity...", text: self.$activity),
+                focus: self.$TaskTitleIsFocused,
+                imageName: "clock.circle.fill"
+            ).padding(.bottom)
             HStack {
                 if self.showManualInputs == false {
                     ClockFace(start: self.$start, end: self.$end)
@@ -49,7 +47,6 @@ struct TaskCreateCard: View {
                                 }
                             }
                         }
-
                         HStack {
                             CustomButton(title: "All Day") {
                                 withAnimation {
@@ -65,12 +62,12 @@ struct TaskCreateCard: View {
                         }
                     } else {
                         HStack {
-                            Text("Manual Entry")
-                                .font(.headline)
-                            Spacer()
-                            Button("Back") {
-                                self.showManualInputs.toggle()
+                            Button("Close") {
+                                withAnimation {
+                                    self.showManualInputs.toggle()
+                                }
                             }
+                            Spacer()
                         }
                         VStack {
                             DatePicker("Start", selection: self.$start)
@@ -78,13 +75,11 @@ struct TaskCreateCard: View {
                         }.padding(.bottom)
                     }
 
-                    HStack {
-                        if self.showManualInputs {
-                            CustomButton(title: "Save") {
-                                TaskTitleIsFocused = false
-                                action()
-                            }
-                        }
+                    HStack(alignment: .bottom) {
+                        CustomButton(title: "Save") {
+                            TaskTitleIsFocused = false
+                            action()
+                        }.disabled(self.activity == "")
                         Spacer()
                         Text(hourString(start: self.start, end: self.end))
                             .font(.title)
@@ -96,11 +91,6 @@ struct TaskCreateCard: View {
                             Spacer()
                             Text(timeString(start: self.start, end: self.end)).font(.caption)
                         }
-                        CustomButton(title: "Save") {
-                            TaskTitleIsFocused = false
-                            action()
-                        }
-                        .padding(.top)
                     }
 
                 }.padding(.leading, 10)
@@ -110,21 +100,11 @@ struct TaskCreateCard: View {
     }
 }
 
-struct NeumorphicStyleTextField: View {
-    var textField: TextField<Text>
-    var focus: FocusState<Bool>.Binding
-    var imageName: String
-    var body: some View {
-        HStack {
-            Image(systemName: imageName)
-                .foregroundColor(.systemGray)
-            textField
-        }
-        .padding(10)
-        .background(Color.systemGray6)
-        .cornerRadius(10)
-        .shadow(color: Color.systemBackground, radius: 2, x: 1, y: 1)
-        .shadow(color: Color.systemGray4, radius: 1, x: -1, y: -1)
-        .focused(self.focus)
-    }
+#Preview {
+    TaskCreateCard(
+        activity: .constant(""),
+        start: .constant(.now),
+        end: .constant(.now),
+        action: {}
+    )
 }

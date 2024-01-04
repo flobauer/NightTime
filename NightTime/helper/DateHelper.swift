@@ -39,10 +39,13 @@ func timeString(start: Date, end: Date) -> String {
     return "\(start) - \(end)"
 }
 
-func calculateHoursPerDay(day: Date, tasks: [Task]) -> String {
+func calculateHoursPerDay(day: Date, tasks: [Task]?) -> String {
+    if tasks == nil {
+        return "0:0hs"
+    }
     let dateString = getDateString(date: day)
 
-    let tasksPerDay = tasks.filter { task in
+    let tasksPerDay = tasks!.filter { task in
         task.endDate == dateString
     }
 

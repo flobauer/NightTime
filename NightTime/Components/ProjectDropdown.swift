@@ -5,14 +5,14 @@
 //  Created by Florian Bauer on 22.11.21.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ProjectDropdown: View {
-    
     @Binding var activeProject: Project
+    @Binding var showProjectCreateModal: Bool
+
     @Query var projects: [Project]
-    @Binding var showCreateModal: Bool
 
     var body: some View {
         Menu {
@@ -20,10 +20,10 @@ struct ProjectDropdown: View {
                 self.projects, id: \.id, content: { project in
                     Button(action: {
                         self.activeProject = project
-                        
+
                         let lastSelectedProject = projects.first(where: { $0.selected })
                         lastSelectedProject?.selected = false
-                        
+
                         project.selected = true
                     }, label: {
                         Text(project.name)
@@ -31,7 +31,7 @@ struct ProjectDropdown: View {
                 }
             )
             Button(action: {
-                self.showCreateModal = true
+                self.showProjectCreateModal = true
             }, label: {
                 Label("Add another Project", systemImage: "plus")
             })
@@ -44,3 +44,14 @@ struct ProjectDropdown: View {
     }
 }
 
+#Preview {
+    // load data
+    let preview = Preview(Project.self)
+    let projects = Project.sampleProjects
+    preview.addExamples(projects)
+
+    return ProjectDropdown(
+        activeProject: .constant(projects.first!),
+        showProjectCreateModal: .constant(false)
+    ).modelContainer(preview.container)
+}

@@ -16,10 +16,10 @@ final class Stream {
     var project: Project?
     
     @Relationship(deleteRule: .cascade, inverse: \Task.stream)
-    var tasks = [Task]()
+    var tasks: [Task]?
     
     var sortedTasks: [Task] {
-        return tasks.sorted { $0.endDate + $0.endTime < $1.endDate + $1.endTime }
+        return tasks?.sorted { $0.endDate + $0.endTime < $1.endDate + $1.endTime } ?? []
     }
     
     var order: Int?

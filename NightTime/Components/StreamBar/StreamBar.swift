@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct StreamBar: View {
-    @Binding var activeStream: Stream
-    @Binding var showCreateScreen: Bool
+    @Binding var activeStream: Stream?
     @Namespace var namespace
 
     var streams: [Stream]
 
     var currentIndex: Int {
-        streams.firstIndex(of: activeStream) ?? streams.count
+        if activeStream === nil {
+            return streams.count
+        }
+
+        return streams.firstIndex(of: activeStream!) ?? streams.count
     }
 
     var body: some View {
@@ -44,7 +47,7 @@ struct StreamBar: View {
                     title: "+",
                     tab: self.streams.count,
                     action: {
-                        self.showCreateScreen = true
+                        self.activeStream = nil
                     }
                 )
             }
