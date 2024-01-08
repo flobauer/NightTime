@@ -73,7 +73,8 @@ extension View {
 
 struct NavigationBarModifier: ViewModifier {
     var backgroundColor: UIColor?
-
+    
+    //I would not set appearances in here usually you set these on AppStart this would be a great thing to do in a SetupServices Class
     init(backgroundColor: UIColor?) {
         self.backgroundColor = backgroundColor
 

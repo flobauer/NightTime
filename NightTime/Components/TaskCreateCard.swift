@@ -19,7 +19,7 @@ struct TaskCreateCard: View {
     @FocusState private var TaskTitleIsFocused: Bool
 
     let action: () -> Void
-
+    //something I have noticed is that you use self everywhere which is not necessary you can omit self inside the views. If you need to use self the xCode will tell you.
     var body: some View {
         VStack {
             CustomTextField(
@@ -28,6 +28,8 @@ struct TaskCreateCard: View {
                 imageName: "clock.circle.fill"
             ).padding(.bottom)
             HStack {
+                //small nitpick but you can make this shorter if you use
+                //if !self.showManualInputs
                 if self.showManualInputs == false {
                     ClockFace(start: self.$start, end: self.$end)
                 }
@@ -35,6 +37,7 @@ struct TaskCreateCard: View {
                     if self.showManualInputs == false {
                         HStack {
                             CustomButton(title: "Morning") {
+                                //I would not set these inside the view I think you're better off if you create a viewModel and handle all the data there the view should ideally only represent data.
                                 withAnimation {
                                     self.start = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
                                     self.end = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
@@ -79,6 +82,7 @@ struct TaskCreateCard: View {
                         CustomButton(title: "Save") {
                             TaskTitleIsFocused = false
                             action()
+                            //Use self.activity.isEmpty here
                         }.disabled(self.activity == "")
                         Spacer()
                         Text(hourString(start: self.start, end: self.end))

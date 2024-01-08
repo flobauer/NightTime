@@ -19,6 +19,7 @@ struct ClockFace: View {
     @Binding var start: Date
     // START Hour in Decimal
     var startValue: CGFloat {
+        //As mentioned in the DateHelper I would highly advise not to perform these operations inside of the view.
         let calendar = Calendar.current
         let hour: Int = calendar.component(.hour, from: start)
         let minutes: Int = calendar.component(.minute, from: start)
@@ -183,6 +184,7 @@ struct ClockFace: View {
         let angleHelper = fixedAngle / (2.0 * .pi) * config.totalValue
 
         // calculate the hour
+        //try to stay consistent with naming usually everything should be named in english
         let tempStunde = Int(angleHelper)
 
         // calculate the minutes
@@ -304,6 +306,7 @@ struct ClockFace_Previews: PreviewProvider {
     }
 }
 
+//This seems out of place here I would recommend to create a seperate file for this.
 extension Color {
     // MARK: - Text Colors
 
