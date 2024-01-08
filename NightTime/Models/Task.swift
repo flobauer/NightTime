@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
+//Do not use Task as a model name Task is a keyword in Swift.
 final class Task {
     @Attribute(.unique) var id: String
     var title: String

@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+// I would highly advise you to create formatters as static computed properties as currently you are creating a new formatter everytime these methods are called which is unnecessary and performance intensive. You could also create en enum with all your formatters.
+// Example: 
+//static let dateFormatter: DateFormatter = {
+//let dateFormatter = DateFormatter()
+//dateFormatter.dateFormat = "EEEE, MMM dd, y"
+//return dateFormatter
+//}()
 func getDateString(date: Date) -> String {
     let formatterDate = DateFormatter()
     formatterDate.timeStyle = .none

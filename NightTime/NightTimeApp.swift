@@ -10,6 +10,7 @@ import SwiftUI
 
 @main
 struct NightTimeApp: App {
+    //I would do this in a seperate function in this case it is managable but if you need to configure more this becomes a bit difficult to maintain. I would create a seperate file where I initialize all my services and then use it here.
     let container: ModelContainer
 
     init() {
