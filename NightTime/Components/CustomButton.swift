@@ -12,8 +12,8 @@ struct CustomButton: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: self.action) {
-            Text(self.title)
+        Button(action: action) {
+            Text(title)
                 .fontWeight(.medium)
                 .font(.system(size: 10))
                 .shadow(color: Color.systemBackground, radius: 0, x: 0, y: 1)

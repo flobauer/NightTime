@@ -16,10 +16,10 @@ struct StreamBarItem: View {
 
     var body: some View {
         Button {
-            self.action()
+            action()
         } label: {
             ZStack {
-                if self.currentIndex == self.tab {
+                if currentIndex == tab {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(Color.systemGray5)
                         .frame(width: 64, height: 34, alignment: .center)
@@ -32,14 +32,14 @@ struct StreamBarItem: View {
                                     RoundedRectangle(cornerRadius: 5, style: .continuous)
                                 )
                         )
-                        .matchedGeometryEffect(id: "underline", in: self.namespace, properties: .frame)
+                        .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
                 }
-                Text(self.title)
+                Text(title)
                     .font(.system(size: 10))
                     .fontWeight(.medium)
                     .tracking(-1)
                     .frame(width: 64, height: 34, alignment: .center)
-            }.animation(.easeInOut, value: self.currentIndex)
+            }.animation(.easeInOut, value: currentIndex)
         }
         .buttonStyle(.plain)
         .padding(3)

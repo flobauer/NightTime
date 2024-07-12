@@ -41,7 +41,7 @@ struct ProjectCreateView: View {
                         stream.order = 0
                         project.streams?.append(stream)
                         
-                        self.modelContext.insert(project)
+                        modelContext.insert(project)
                         
                         projectName = ""
                         

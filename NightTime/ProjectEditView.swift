@@ -23,7 +23,7 @@ struct ProjectEditView: View {
                         EditScreenName(stream: stream)
                     }.onMove { from, to in
                         // Make a copy of the current list of items
-                        var updatedItems = self.project.sortedStreams
+                        var updatedItems = project.sortedStreams
                         
                         // Apply the move operation to the items
                         updatedItems.move(fromOffsets: from, toOffset: to)
@@ -54,7 +54,7 @@ struct EditScreenName: View {
     var body: some View {
         TextField("Stream Name", text: $name)
             .onAppear {
-                self.name = stream.name
+                name = stream.name
             }
             .onChange(of: name) { _, newValue in
                 stream.name = newValue

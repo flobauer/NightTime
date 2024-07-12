@@ -37,7 +37,7 @@ final class Task {
         formatter.dateFormat = "EEEE, d. MMMM yyyy H:mm:ss zzzz"
         
         // concat time and date
-        let start = "\(self.startDate) \(self.startTime)"
+        let start = "\(startDate) \(startTime)"
         
         return formatter.date(from: start) ?? Date.now
     }
@@ -47,7 +47,7 @@ final class Task {
         formatter.dateFormat = "EEEE, d. MMMM yyyy H:mm:ss zzzz"
         
         // concat time and date
-        let end = "\(self.endDate) \(self.endTime)"
+        let end = "\(endDate) \(endTime)"
         
         return formatter.date(from: end) ?? Date.now
     }

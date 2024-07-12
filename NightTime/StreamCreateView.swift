@@ -33,13 +33,13 @@ struct StreamCreateView: View {
 
             Button("Save", action: {
                 if streamName != "" {
-                    let highestOrder = self.activeProject.highestOrder
+                    let highestOrder = activeProject.highestOrder
 
                     let stream = Stream(name: streamName)
                     stream.order = highestOrder + 1
 
-                    self.activeProject.streams?.append(stream)
-                    self.activeStream = stream
+                    activeProject.streams?.append(stream)
+                    activeStream = stream
 
                     streamName = ""
                 }
@@ -51,7 +51,7 @@ struct StreamCreateView: View {
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 5, y: 5)
         .shadow(color: Color.white.opacity(0.6), radius: 10, x: -5, y: -5)
         .onAppear {
-            self.isFocused = true
+            isFocused = true
         }
         Spacer()
     }

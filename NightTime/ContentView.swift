@@ -35,7 +35,7 @@ struct ContentView: View {
                     Text("Night Time").font(.largeTitle).padding()
                     Text("Timetracking for humans in the creative industry that dislike time tracking").font(.title2).padding()
                     Button(action: {
-                        self.showProjectCreateModal = true
+                        showProjectCreateModal = true
                     }) {
                         Label("Create Project", systemImage: "plus")
                     }

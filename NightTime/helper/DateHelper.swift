@@ -163,7 +163,7 @@ class DateState: ObservableObject {
     func generateDays(number: Int) {
         let today = Date()
         let formatter = DateFormatter()
-        self.allDays = (0 ..< number).map { index -> Day in
+        allDays = (0 ..< number).map { index -> Day in
             let date = Calendar.current.date(byAdding: .day, value: index * -1, to: today) ?? Date()
             return Day(
                 weekday: date.dayOfWeek(withFormatter: formatter) ?? "",

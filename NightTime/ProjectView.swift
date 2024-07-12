@@ -20,29 +20,29 @@ struct ProjectView: View {
             Color.systemGray6
             VStack {
                 StreamBar(
-                    activeStream: self.$activeStream,
-                    streams: self.activeProject.sortedStreams
+                    activeStream: $activeStream,
+                    streams: activeProject.sortedStreams
                 )
-                if self.activeStream != nil {
+                if activeStream != nil {
                     StreamView(
-                        project: self.activeProject,
-                        stream: self.activeStream!
+                        project: activeProject,
+                        stream: activeStream!
                     )
                 } else {
                     StreamCreateView(
-                        activeProject: self.activeProject,
-                        activeStream: self.$activeStream
+                        activeProject: activeProject,
+                        activeStream: $activeStream
                     )
                 }
             }
         }
         .navigationBarItems(
             leading: ProjectDropdown(
-                activeProject: self.$activeProject,
-                showProjectCreateModal: self.$showProjectCreateModal
+                activeProject: $activeProject,
+                showProjectCreateModal: $showProjectCreateModal
             ),
             trailing: Button(action: {
-                self.showProjectEditModal = true
+                showProjectEditModal = true
             }, label: {
                 Image(systemName: "gearshape.fill")
                     .foregroundColor(Color.primary)
@@ -51,56 +51,8 @@ struct ProjectView: View {
         .navigationBarColor(UIColor.systemGray6)
         .ignoresSafeArea(.all, edges: .bottom)
         .onAppear {
-            if self.activeProject.sortedStreams.count > 0 {
-                self.activeStream = self.activeProject.sortedStreams.first
-            }
-        }
-    }
-}
-
-extension String {
-    func deletingSuffix(_ suffix: String) -> String {
-        guard self.hasSuffix(suffix) else { return self }
-        return String(self.dropLast(suffix.count))
-    }
-}
-
-extension View {
-    func navigationBarColor(_ backgroundColor: UIColor?) -> some View {
-        self.modifier(NavigationBarModifier(backgroundColor: backgroundColor))
-    }
-}
-
-struct NavigationBarModifier: ViewModifier {
-    var backgroundColor: UIColor?
-
-    init(backgroundColor: UIColor?) {
-        self.backgroundColor = backgroundColor
-
-        let textColor = UIColor(Color.primary)
-
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = .clear
-        coloredAppearance.titleTextAttributes = [.foregroundColor: textColor]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: textColor]
-
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().compactAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-        UINavigationBar.appearance().tintColor = textColor
-    }
-
-    func body(content: Content) -> some View {
-        ZStack {
-            content
-            VStack {
-                GeometryReader { geometry in
-                    Color(self.backgroundColor ?? .clear)
-                        .frame(height: geometry.safeAreaInsets.top)
-                        .edgesIgnoringSafeArea(.top)
-                    Spacer()
-                }
+            if activeProject.sortedStreams.count > 0 {
+                activeStream = activeProject.sortedStreams.first
             }
         }
     }

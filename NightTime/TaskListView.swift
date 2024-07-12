@@ -22,6 +22,8 @@ struct TaskListView: View {
     init(stream: Stream, day: Date) {
         self.stream = stream
         self.day = day
+        self.start = day
+        self.end = day
         
         let id = stream.id
         let dateString = getDateString(date: day)
@@ -31,14 +33,12 @@ struct TaskListView: View {
         }
 
         self._tasks = Query(filter: predicate, sort: \Task.endTime)
-        self.start = day
-        self.end = day
     }
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(self.tasks[index])
+                modelContext.delete(tasks[index])
             }
         }
     }
@@ -48,39 +48,38 @@ struct TaskListView: View {
             ZStack(alignment: .top) {
                 Color.systemGray6.cornerRadius(10)
                 TaskEditCard(
-                    activity: self.$activity,
-                    start: self.$start,
-                    end: self.$end,
+                    activity: $activity,
+                    start: $start,
+                    end: $end,
                     action: {
                         let task = Task(
-                            title: self.activity,
-                            startDate: getDateString(date: self.start),
-                            startTime: getTimeString(date: self.start),
-                            endDate: getDateString(date: self.end),
-                            endTime: getTimeString(date: self.end),
+                            title: activity,
+                            startDate: getDateString(date: start),
+                            startTime: getTimeString(date: start),
+                            endDate: getDateString(date: end),
+                            endTime: getTimeString(date: end),
                             user: "flo"
                         )
                         
-                        self.stream.tasks?.append(task)
+                        stream.tasks?.append(task)
                         
-                        self.activity = ""
+                        activity = ""
                         
                         withAnimation {
-                            self.start = getStartDate(tasks: self.tasks, date: self.day)
-                            self.end = getEndDate(date: self.day)
+                            start = getStartDate(tasks: tasks, date: day)
+                            end = getEndDate(date: day)
                         }
                     }
                 ).onAppear {
-                    print(day)
-                    self.start = getStartDate(tasks: self.tasks, date: self.day)
-                    self.end = getEndDate(date: self.day)
+                    start = getStartDate(tasks: tasks, date: day)
+                    end = getEndDate(date: day)
                 }
             }
-            if self.tasks.isEmpty {
+            if tasks.isEmpty {
                 Text("No tasks yet")
             } else {
                 List {
-                    ForEach(self.tasks, id: \.id) { task in
+                    ForEach(tasks, id: \.id) { task in
                         HStack {
                             NavigationLink(destination: TaskDetailView(task: task)) {
                                 Text(task.title)

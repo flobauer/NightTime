@@ -14,14 +14,14 @@ struct TaskDayGroupingView: View {
     var stream: Stream
 
     var body: some View {
-        LazyVStack { 
-            ForEach(self.appState.allDays, id: \.id) { day in
+        LazyVStack {
+            ForEach(appState.allDays, id: \.id) { day in
                 NavigationLink(destination: TaskListView(stream: stream, day: day.date)) {
                     DateCard(
                         date: day.day,
                         month: day.month,
                         name: day.weekday,
-                        time: calculateHoursPerDay(day: day.date, tasks: self.stream.tasks)
+                        time: calculateHoursPerDay(day: day.date, tasks: stream.tasks)
                     ).padding(.vertical, 6)
                     Spacer()
                     Image(systemName: "chevron.forward")
@@ -31,7 +31,7 @@ struct TaskDayGroupingView: View {
             }
         }
         .onAppear {
-            self.appState.generateDays(number: 30)
+            appState.generateDays(number: 30)
         }
     }
 }

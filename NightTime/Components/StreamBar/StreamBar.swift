@@ -27,7 +27,7 @@ struct StreamBar: View {
                 ForEach(
                     Array(
                         zip(
-                            self.streams.indices, self.streams
+                            streams.indices, streams
                         )
                     ), id: \.0, content: { index, stream in
                         StreamBarItem(
@@ -36,7 +36,7 @@ struct StreamBar: View {
                             title: stream.name,
                             tab: index,
                             action: {
-                                self.activeStream = stream
+                                activeStream = stream
                             }
                         )
                     }
@@ -45,9 +45,9 @@ struct StreamBar: View {
                     currentIndex: currentIndex,
                     namespace: namespace,
                     title: "+",
-                    tab: self.streams.count,
+                    tab: streams.count,
                     action: {
-                        self.activeStream = nil
+                        activeStream = nil
                     }
                 )
             }

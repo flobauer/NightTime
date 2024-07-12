@@ -26,77 +26,82 @@ struct TaskEditCard: View {
 
         VStack {
             CustomTextField(
-                textField: TextField("Enter your activity...", text: self.$activity),
-                focus: self.$TaskTitleIsFocused,
+                textField: TextField("Enter your activity...", text: $activity),
+                focus: $TaskTitleIsFocused,
                 imageName: "clock.circle.fill"
             ).padding(.bottom, !showManualInputs ? 10 : 0)
 
             layout {
                 ClockFaceMorph(
-                    round: self.$round,
-                    start: self.$start,
-                    end: self.$end
+                    round: $round,
+                    start: $start,
+                    end: $end
                 )
 
                 VStack(alignment: .leading) {
-                    if self.showManualInputs == false {
+                    if !showManualInputs {
                         HStack {
                             CustomButton(title: "Morning") {
                                 withAnimation {
-                                    self.start = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
-                                    self.end = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
+                                    start = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
+                                    end = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date())!
                                 }
                             }
                             CustomButton(title: "Afternoon") {
                                 withAnimation {
-                                    self.start = Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: Date())!
-                                    self.end = Calendar.current.date(bySettingHour: 18, minute: 0, second: 0, of: Date())!
+                                    start = Calendar.current.date(bySettingHour: 13, minute: 0, second: 0, of: Date())!
+                                    end = Calendar.current.date(bySettingHour: 18, minute: 0, second: 0, of: Date())!
                                 }
                             }
                         }
                         HStack {
                             CustomButton(title: "All Day") {
                                 withAnimation {
-                                    self.start = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
-                                    self.end = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date())!
+                                    start = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
+                                    end = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date())!
                                 }
                             }
                             CustomButton(title: "Manual") {
                                 withAnimation {
-                                    self.showManualInputs.toggle()
-                                    self.round.toggle()
+                                    showManualInputs.toggle()
+                                    round.toggle()
                                 }
                             }
                         }
                     } else {
                         VStack {
-                            DatePicker("Start", selection: self.$start)
-                            DatePicker("End", selection: self.$end)
+                            DatePicker("Start", selection: $start)
+                            DatePicker("End", selection: $end)
                         }
                     }
 
                     HStack(alignment: .bottom) {
                         Spacer()
-                        Text(hourString(start: self.start, end: self.end))
+                        Text(hourString(start: start, end: end))
                             .font(.title)
                             .bold()
                     }
-                    if self.showManualInputs == false {
+                    if !showManualInputs {
                         HStack {
                             Spacer()
-                            Text(timeString(start: self.start, end: self.end)).font(.caption)
+                            Text(
+                                timeString(
+                                    start: start,
+                                    end: end
+                                )
+                            ).font(.caption)
                         }
                     }
-                    let title = (self.activity == "" && showManualInputs) ?
+                    let title = (activity.isEmpty && showManualInputs) ?
                         "Cancel" :
-                        self.activity == "" ? "Enter Activity first" : "Save"
+                        activity.isEmpty ? "Enter Activity first" : "Save"
                     CustomButton(title: title) {
-                        self.round = true
-                        self.showManualInputs = false
+                        round = true
+                        showManualInputs = false
 
-                        if self.activity != "" {
-                            self.TaskTitleIsFocused = false
-                            self.action()
+                        if !activity.isEmpty {
+                            TaskTitleIsFocused = false
+                            action()
                         }
                     }
 

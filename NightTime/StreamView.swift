@@ -24,40 +24,40 @@ struct StreamView: View {
     
     var body: some View {
         VStack {
-            if self.showingHeader {
+            if showingHeader {
                 TaskEditCard(
-                    activity: self.$activity,
-                    start: self.$start,
-                    end: self.$end,
+                    activity: $activity,
+                    start: $start,
+                    end: $end,
                     action: {
                         let task = Task(
-                            title: self.activity,
-                            startDate: getDateString(date: self.start),
-                            startTime: getTimeString(date: self.start),
-                            endDate: getDateString(date: self.end),
-                            endTime: getTimeString(date: self.end),
+                            title: activity,
+                            startDate: getDateString(date: start),
+                            startTime: getTimeString(date: start),
+                            endDate: getDateString(date: end),
+                            endTime: getTimeString(date: end),
                             user: "flo"
                         )
                         
-                        self.stream.tasks?.append(task)
+                        stream.tasks?.append(task)
                         
-                        self.activity = ""
+                        activity = ""
                         
                         withAnimation {
-                            self.start = getStartDate(tasks: self.stream.sortedTasks, date: Date.now)
-                            self.end = getEndDate(date: Date.now)
+                            start = getStartDate(tasks: stream.sortedTasks, date: Date.now)
+                            end = getEndDate(date: Date.now)
                         }
                     }
                 )
                 .onAppear {
-                    self.start = getStartDate(tasks: self.stream.sortedTasks, date: Date.now)
-                    self.end = getEndDate(date: Date.now)
+                    start = getStartDate(tasks: stream.sortedTasks, date: Date.now)
+                    end = getEndDate(date: Date.now)
                 }
             }
             GeometryReader { outer in
                 let outerHeight = outer.size.height
                 ScrollView(.vertical) {
-                    TaskDayGroupingView(stream: self.stream)
+                    TaskDayGroupingView(stream: stream)
                         .background {
                             GeometryReader { proxy in
                                 let contentHeight = proxy.size.height
@@ -67,13 +67,13 @@ struct StreamView: View {
                                 )
                                 Color.clear
                                     .onChange(of: minY) { oldVal, newVal in
-                                        if (self.showingHeader && newVal > oldVal) || (!self.showingHeader && newVal < oldVal) {
-                                            self.turningPoint = newVal
+                                        if (showingHeader && newVal > oldVal) || (!showingHeader && newVal < oldVal) {
+                                            turningPoint = newVal
                                         }
-                                        if (self.showingHeader && (self.turningPoint - newVal) > self.thresholdScrollDistance) ||
-                                            (!self.showingHeader && (newVal - self.turningPoint) > self.thresholdScrollDistance)
+                                        if (showingHeader && (turningPoint - newVal) > thresholdScrollDistance) ||
+                                            (!showingHeader && (newVal - turningPoint) > thresholdScrollDistance)
                                         {
-                                            self.showingHeader = newVal > self.turningPoint
+                                            showingHeader = newVal > turningPoint
                                         }
                                     }
                             }
@@ -84,7 +84,7 @@ struct StreamView: View {
                 .background(Color.systemBackground)
             }
         }
-        .animation(.easeInOut, value: self.showingHeader)
+        .animation(.easeInOut, value: showingHeader)
     }
 }
 
