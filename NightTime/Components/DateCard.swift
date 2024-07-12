@@ -23,10 +23,10 @@ struct DateCard: View {
                     VStack {
                         Text(date)
                             .font(.system(size: 24, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.primary)
                         Text(month)
                             .font(.system(size: 10))
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.primary)
                     }
                 )
                 .padding(.trailing, 4)
@@ -36,7 +36,7 @@ struct DateCard: View {
                     .font(.system(size: 20, weight: .semibold))
                 Text(time)
                     .font(.subheadline)
-                    .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
+                    .foregroundColor(Color.systemGray)
             }
         }
     }

@@ -26,7 +26,7 @@ func getTimeString(date: Date) -> String {
 func hourString(start: Date, end: Date) -> String {
     let diffs = Calendar.current.dateComponents([.hour, .minute], from: start, to: end)
 
-    return "\(Int(diffs.hour ?? 0)):\(Int(diffs.minute ?? 0))hs"
+    return "\(Int(diffs.hour ?? 0)):\(Int(diffs.minute ?? 0))hrs"
 }
 
 func timeString(start: Date, end: Date) -> String {
@@ -41,7 +41,7 @@ func timeString(start: Date, end: Date) -> String {
 
 func calculateHoursPerDay(day: Date, tasks: [Task]?) -> String {
     if tasks == nil {
-        return "0:0hs"
+        return "0:0hrs"
     }
     let dateString = getDateString(date: day)
 
@@ -56,7 +56,7 @@ func calculateHoursPerDay(day: Date, tasks: [Task]?) -> String {
     let minutesLeft = minutes % 60
     let hours = (minutes - minutesLeft) / 60
 
-    return "\(hours):\(minutesLeft)hs"
+    return "\(hours):\(minutesLeft)hrs"
 }
 
 // function that calcualtes hours
@@ -80,47 +80,61 @@ func calculateTotalMinutesOfTask(start: Date, end: Date) -> Int {
     return hours * 60 + minutes
 }
 
-func getStartDate(tasks: [Task]) -> Date {
+func getStartDate(tasks: [Task], date: Date) -> Date {
     // Step 1
-    // check if there is already a Task of today
-    let today = Date.now
+    // check if there is already a Task created for requested day
+    let requestedDate = date
     let formatter = DateFormatter()
     formatter.timeStyle = .none
     formatter.dateStyle = .full
 
-    let todayString = formatter.string(from: today)
+    let requestedDateString = formatter.string(from: requestedDate)
 
-    let task = tasks.first(where: { $0.endDate == todayString })
+    let task = tasks.last(where: { $0.endDate == requestedDateString })
 
+    // we have an enddate of the requested day, return the endtime as start date
     if let task = task {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .full
-        formatter.dateStyle = .full
-
-        let startDate = formatter.date(from: task.endDate + " " + task.endTime)
-        return startDate ?? Date.now
+        return task.getEndAsDate()
     }
 
     // Step 2
-    // Check if it is morning or afternoon
-    let calendar = Calendar.current
-    let hour = calendar.component(.hour, from: today)
-    let midnight = calendar.startOfDay(for: today)
+    // Check if it is today
+    let today = Date.now
+    let todaysFormatter = DateFormatter()
+    todaysFormatter.timeStyle = .none
+    todaysFormatter.dateStyle = .full
 
-    if hour < 9 {
-        return midnight
-    } else if hour < 13 {
-        // return 09:00
-        return midnight.addingTimeInterval(9 * 60 * 60)
-    } else {
-        // return 13:00
-        return midnight.addingTimeInterval(13 * 60 * 60)
+    let todayString = formatter.string(from: today)
+
+    if requestedDateString == todayString {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: today)
+        let midnight = calendar.startOfDay(for: today)
+
+        if hour < 9 {
+            return midnight
+        } else if hour < 13 {
+            // return 09:00
+            return midnight.addingTimeInterval(9 * 60 * 60)
+        } else {
+            // return 13:00
+            return midnight.addingTimeInterval(13 * 60 * 60)
+        }
     }
+
+    // Step 3
+    // It is another day without entry, so we return the full day
+    let calendar = Calendar.current
+    let hour = calendar.component(.hour, from: requestedDate)
+    let midnight = calendar.startOfDay(for: requestedDate)
+
+    // return 09:00
+    return midnight.addingTimeInterval(9 * 60 * 60)
 }
 
 // end date is now
-func getEndDate() -> Date {
-    return Date.now
+func getEndDate(date: Date) -> Date {
+    return date
 }
 
 extension Date {

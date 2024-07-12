@@ -23,8 +23,8 @@ struct CustomTextField: View {
         .padding(.leading, 10)
         .background(Color.systemGray6)
         .cornerRadius(10)
-        .shadow(color: Color.systemBackground, radius: 2, x: 1, y: 1)
-        .shadow(color: Color.systemGray4, radius: 1, x: -1, y: -1)
+        .shadow(color: .systemBackground, radius: 2, x: 1, y: 1)
+        .shadow(color: .systemGray4, radius: 1, x: -1, y: -1)
         .focused(self.focus)
     }
 }

@@ -14,7 +14,7 @@ struct TaskDayGroupingView: View {
     var stream: Stream
 
     var body: some View {
-        LazyVStack {
+        LazyVStack { 
             ForEach(self.appState.allDays, id: \.id) { day in
                 NavigationLink(destination: TaskListView(stream: stream, day: day.date)) {
                     DateCard(
@@ -24,6 +24,9 @@ struct TaskDayGroupingView: View {
                         time: calculateHoursPerDay(day: day.date, tasks: self.stream.tasks)
                     ).padding(.vertical, 6)
                     Spacer()
+                    Image(systemName: "chevron.forward")
+                        .foregroundColor(.systemGray)
+                        .font(.system(size: 24))
                 }
             }
         }

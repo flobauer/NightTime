@@ -25,7 +25,7 @@ struct StreamView: View {
     var body: some View {
         VStack {
             if self.showingHeader {
-                TaskCreateCard(
+                TaskEditCard(
                     activity: self.$activity,
                     start: self.$start,
                     end: self.$end,
@@ -44,14 +44,14 @@ struct StreamView: View {
                         self.activity = ""
                         
                         withAnimation {
-                            self.start = getStartDate(tasks: self.stream.sortedTasks)
-                            self.end = getEndDate()
+                            self.start = getStartDate(tasks: self.stream.sortedTasks, date: Date.now)
+                            self.end = getEndDate(date: Date.now)
                         }
                     }
                 )
                 .onAppear {
-                    self.start = getStartDate(tasks: self.stream.sortedTasks)
-                    self.end = getEndDate()
+                    self.start = getStartDate(tasks: self.stream.sortedTasks, date: Date.now)
+                    self.end = getEndDate(date: Date.now)
                 }
             }
             GeometryReader { outer in

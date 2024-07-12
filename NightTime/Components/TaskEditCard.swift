@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskCreateCard: View {
+struct TaskEditCard: View {
     @Environment(\.colorScheme) var colorScheme
 
     @Binding var activity: String
@@ -15,22 +15,29 @@ struct TaskCreateCard: View {
     @Binding var end: Date
 
     @State var showManualInputs: Bool = false
+    @State var round: Bool = true
 
     @FocusState private var TaskTitleIsFocused: Bool
 
     let action: () -> Void
 
     var body: some View {
+        let layout = round ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout())
+
         VStack {
             CustomTextField(
                 textField: TextField("Enter your activity...", text: self.$activity),
                 focus: self.$TaskTitleIsFocused,
                 imageName: "clock.circle.fill"
-            ).padding(.bottom)
-            HStack {
-                if self.showManualInputs == false {
-                    ClockFace(start: self.$start, end: self.$end)
-                }
+            ).padding(.bottom, !showManualInputs ? 10 : 0)
+
+            layout {
+                ClockFaceMorph(
+                    round: self.$round,
+                    start: self.$start,
+                    end: self.$end
+                )
+
                 VStack(alignment: .leading) {
                     if self.showManualInputs == false {
                         HStack {
@@ -57,39 +64,39 @@ struct TaskCreateCard: View {
                             CustomButton(title: "Manual") {
                                 withAnimation {
                                     self.showManualInputs.toggle()
+                                    self.round.toggle()
                                 }
                             }
                         }
                     } else {
-                        HStack {
-                            Button("Close") {
-                                withAnimation {
-                                    self.showManualInputs.toggle()
-                                }
-                            }
-                            Spacer()
-                        }
                         VStack {
                             DatePicker("Start", selection: self.$start)
                             DatePicker("End", selection: self.$end)
-                        }.padding(.bottom)
+                        }
                     }
 
                     HStack(alignment: .bottom) {
-                        CustomButton(title: "Save") {
-                            TaskTitleIsFocused = false
-                            action()
-                        }.disabled(self.activity == "")
                         Spacer()
                         Text(hourString(start: self.start, end: self.end))
                             .font(.title)
                             .bold()
-                            .padding(.top)
                     }
                     if self.showManualInputs == false {
                         HStack {
                             Spacer()
                             Text(timeString(start: self.start, end: self.end)).font(.caption)
+                        }
+                    }
+                    let title = (self.activity == "" && showManualInputs) ?
+                        "Cancel" :
+                        self.activity == "" ? "Enter Activity first" : "Save"
+                    CustomButton(title: title) {
+                        self.round = true
+                        self.showManualInputs = false
+
+                        if self.activity != "" {
+                            self.TaskTitleIsFocused = false
+                            self.action()
                         }
                     }
 
@@ -101,7 +108,7 @@ struct TaskCreateCard: View {
 }
 
 #Preview {
-    TaskCreateCard(
+    TaskEditCard(
         activity: .constant(""),
         start: .constant(.now),
         end: .constant(.now),

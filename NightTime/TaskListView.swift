@@ -16,8 +16,8 @@ struct TaskListView: View {
     @Query var tasks: [Task]
     
     @State private var activity = ""
-    @State private var start: Date = .now
-    @State private var end: Date = .now
+    @State private var start: Date
+    @State private var end: Date
     
     init(stream: Stream, day: Date) {
         self.stream = stream
@@ -31,6 +31,8 @@ struct TaskListView: View {
         }
 
         self._tasks = Query(filter: predicate, sort: \Task.endTime)
+        self.start = day
+        self.end = day
     }
     
     private func deleteItems(offsets: IndexSet) {
@@ -45,7 +47,7 @@ struct TaskListView: View {
         VStack {
             ZStack(alignment: .top) {
                 Color.systemGray6.cornerRadius(10)
-                TaskCreateCard(
+                TaskEditCard(
                     activity: self.$activity,
                     start: self.$start,
                     end: self.$end,
@@ -64,13 +66,14 @@ struct TaskListView: View {
                         self.activity = ""
                         
                         withAnimation {
-                            self.start = getStartDate(tasks: self.tasks)
-                            self.end = getEndDate()
+                            self.start = getStartDate(tasks: self.tasks, date: self.day)
+                            self.end = getEndDate(date: self.day)
                         }
                     }
                 ).onAppear {
-                    self.start = getStartDate(tasks: self.tasks)
-                    self.end = getEndDate()
+                    print(day)
+                    self.start = getStartDate(tasks: self.tasks, date: self.day)
+                    self.end = getEndDate(date: self.day)
                 }
             }
             if self.tasks.isEmpty {
@@ -81,15 +84,15 @@ struct TaskListView: View {
                         HStack {
                             NavigationLink(destination: TaskDetailView(task: task)) {
                                 Text(task.title)
-                            }
-                            Spacer()
-                            VStack {
-                                Text(calculateHoursOfTask(start: task.getStartAsDate(), end: task.getEndAsDate()))
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.gray)
-                                Text(task.startDate)
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.gray)
+                                Spacer()
+                                VStack {
+                                    Text(calculateHoursOfTask(start: task.getStartAsDate(), end: task.getEndAsDate()))
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
+                                    Text(task.startDate)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                     }.onDelete(perform: deleteItems)
