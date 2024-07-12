@@ -119,7 +119,11 @@ struct ClockFaceMorph: View {
                     .onChanged { gesture in
                         round ?
                             change(location: gesture.location, start: true) :
-                            changeRect(location: gesture.location, start: true)
+                            changeRect(
+                                location: gesture.location,
+                                start: true,
+                                rectangleWidth: rectangleWidth
+                            )
 
                     })
 
@@ -138,7 +142,7 @@ struct ClockFaceMorph: View {
                     .onChanged { gesture in
                         round ?
                             change(location: gesture.location) :
-                            changeRect(location: gesture.location)
+                            changeRect(location: gesture.location, rectangleWidth: rectangleWidth)
                     })
 
                 if round {
@@ -192,7 +196,7 @@ struct ClockFaceMorph: View {
         let tempMinutes = Int(angleHelper * 60)
         let tempMinute = Int(tempMinutes % 60)
 
-        if start == true {
+        if start {
             // create date component object
             var startTime = Calendar.current.date(bySettingHour: tempStunde, minute: tempMinute, second: 0, of: self.start)!
             // set date
@@ -220,9 +224,37 @@ struct ClockFaceMorph: View {
         }
     }
 
-    private func changeRect(location: CGPoint, start: Bool = false) {
+    private func changeRect(location: CGPoint, start: Bool = false, rectangleWidth: CGFloat) {
         let position = location.x
-        print(durationInMinutes)
+        let deltaInPercent = position / rectangleWidth
+
+        let tempStunde = Int(15 + deltaInPercent * 18)
+        if tempStunde > 23 {
+            return
+        }
+        print(tempStunde)
+        // calculate the minutes
+        let tempMinutes = Int(15 * 60 + deltaInPercent * 60 * 18)
+        print(tempMinutes)
+        let tempMinute = Int((tempMinutes/15) % 60)
+        print(tempMinute)
+
+        if start {
+            // create date component object
+            var startTime = Calendar.current.date(bySettingHour: tempStunde, minute: tempMinute, second: 0, of: self.start)!
+            
+            self.start = startTime
+        } else {
+            // create date component object
+            var endTime = Calendar.current.date(bySettingHour: tempStunde, minute: tempMinute, second: 0, of: end)!
+          
+            end = endTime
+        }
+
+        if durationInMinutes % 5 == 0 && lastTick != durationInMinutes {
+            lastTick = durationInMinutes // to avoid multiple clicking when staying on a number
+            hapticFeedback()
+        }
 
         // get the hour of the new location
 
